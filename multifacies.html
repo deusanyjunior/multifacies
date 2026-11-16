@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrevistada Multifácies</title>
+<style>
+  :root {
+    --vermelho: #b3121f;
+    --vermelho-vivo: #e02433;
+    --vermelho-escuro: #6e0b14;
+    --verde: #1f7a4d;
+    --verde-claro: #3fbf84;
+    --fundo: #140406;
+    --fundo-2: #1f070a;
+    --tinta: #f6e9ea;
+    --tinta-suave: #d8b9bc;
+    --linha: rgba(224, 36, 51, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(ellipse at 50% 0%, var(--fundo-2), var(--fundo) 60%),
+      var(--fundo);
+    color: var(--tinta);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- HERO ---------- */
+  header.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 72px 24px 40px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 46%, rgba(224,36,51,0.20), transparent 55%),
+      radial-gradient(circle at 50% 46%, rgba(63,191,132,0.09), transparent 45%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+    margin-bottom: 18px;
+  }
+
+  h1.title {
+    font-size: clamp(2.4rem, 7vw, 4.6rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #fff 10%, var(--vermelho-vivo) 55%, var(--verde-claro) 115%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 20px;
+  }
+
+  .subtitle {
+    max-width: 640px;
+    color: var(--tinta-suave);
+    font-size: clamp(1rem, 2.3vw, 1.18rem);
+  }
+
+  /* ---------- PALCO 3D ---------- */
+  .palco {
+    position: relative;
+    width: min(92vw, 640px);
+    aspect-ratio: 1 / 1;
+    margin: 18px auto 0;
+  }
+  .palco canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+  .palco canvas:active { cursor: grabbing; }
+
+  .hint {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    opacity: 0.7;
+  }
+
+  /* ---------- SEÇÕES ---------- */
+  section { padding: 72px 0; }
+
+  .sec-head { text-align: center; margin-bottom: 44px; }
+  .sec-head h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .sec-head h2 .verde { color: var(--verde-claro); }
+  .sec-head p { color: var(--tinta-suave); max-width: 620px; margin: 12px auto 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    position: relative;
+    background: linear-gradient(160deg, rgba(179,18,31,0.16), rgba(20,4,6,0.6));
+    border: 1px solid rgba(224,36,51,0.22);
+    border-radius: 18px;
+    padding: 26px 24px;
+    overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(var(--vermelho-vivo), var(--verde-claro));
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: var(--verde);
+    box-shadow: 0 18px 40px -22px rgba(224,36,51,0.6);
+  }
+  .card.destaque {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 1px var(--verde-claro), 0 18px 44px -20px rgba(63,191,132,0.6);
+  }
+
+  .card .num {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    color: var(--verde-claro);
+    text-transform: uppercase;
+  }
+  .card h3 { font-size: 1.18rem; margin: 10px 0 10px; font-weight: 700; }
+
+  .tension {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 14px 0 16px;
+    font-size: 0.92rem;
+  }
+  .tension .a, .tension .b {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .tension .a { background: rgba(224,36,51,0.18); color: #ffb3ba; border: 1px solid rgba(224,36,51,0.4); }
+  .tension .b { background: rgba(63,191,132,0.14); color: var(--verde-claro); border: 1px solid rgba(63,191,132,0.4); }
+  .tension .vs { opacity: 0.5; font-size: 0.8rem; }
+
+  .card p.desc { color: var(--tinta-suave); font-size: 0.95rem; }
+
+  /* respiro após os doze encontros */
+  .apos-encontros { height: clamp(48px, 9vw, 110px); }
+
+  /* camadas do ser: duas a duas */
+  .grid-duas {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (max-width: 560px) {
+    .grid-duas { grid-template-columns: 1fr; }
+  }
+
+  .ref {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(224,36,51,0.25);
+    font-size: 0.84rem;
+    color: var(--tinta-suave);
+  }
+  .ref .k { color: #ff8a93; font-weight: 600; }
+
+  /* ---------- FAIXA DE CONCEITO ---------- */
+  .conceito {
+    background: linear-gradient(90deg, rgba(179,18,31,0.22), rgba(31,122,77,0.12));
+    border-top: 1px solid rgba(224,36,51,0.25);
+    border-bottom: 1px solid rgba(224,36,51,0.25);
+    text-align: center;
+  }
+  .conceito blockquote {
+    font-size: clamp(1.2rem, 3.4vw, 1.9rem);
+    font-weight: 300;
+    max-width: 760px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  .conceito blockquote b { font-weight: 700; color: var(--verde-claro); font-style: normal; }
+
+  /* ---------- RODAPÉ (eco do cabeçalho) ---------- */
+  .rodape {
+    position: relative;
+    margin-top: clamp(80px, 16vw, 200px);
+    padding: clamp(60px, 10vw, 120px) 24px clamp(70px, 12vw, 140px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  .rodape::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(224,36,51,0.16), transparent 58%),
+      radial-gradient(circle at 50% 40%, rgba(63,191,132,0.07), transparent 46%);
+    pointer-events: none;
+  }
+  .palco-rodape {
+    width: min(70vw, 360px);
+    margin-top: 0;
+  }
+  .rodape .eyebrow { margin-top: 18px; margin-bottom: 0; }
+
+  .fade { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .fade.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">Retrato de uma pluralidade</div>
+  <h1 class="title">Entrevistada Multifácies</h1>
+  <p class="subtitle">
+    Uma só pessoa que guarda muitas versões de si. O icosaedro tem doze vértices,
+    e deste núcleo partem doze encontros do ser: nenhum deles cancela o outro — eles
+    convivem, se tensionam e se completam.
+  </p>
+
+  <div class="palco" aria-label="Ser central dentro de um icosaedro tridimensional, do qual partem doze encontros do ser como um grafo">
+    <canvas id="cena" width="1280" height="1280"></canvas>
+  </div>
+  <div class="hint">Arraste para girar · role para percorrer os encontros ↓</div>
+</header>
+
+<section class="wrap" id="facetas">
+  <div class="sec-head fade">
+    <h2>Os <span class="verde">doze encontros</span> do ser</h2>
+    <p>Cada vértice é uma faceta: uma ideia que carrega sua própria tensão interna,
+       ancorada numa referência externa — nunca numa pessoa.</p>
+  </div>
+  <div class="grid" id="cards"></div>
+  <div class="apos-encontros" aria-hidden="true"></div>
+</section>
+
+<section class="conceito">
+  <div class="wrap">
+    <blockquote class="fade">
+      “Você não <i>é</i> retificado. Você <b>está</b> retificado.”
+      O corpo como estrutura maleável, sempre em reconstrução, nunca um veredito.
+    </blockquote>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head fade">
+    <h2>Camadas do <span class="verde">ser</span></h2>
+    <p>A saúde não se resume à ausência de doença: é um estado geral, lido em
+       várias camadas simultâneas.</p>
+  </div>
+  <div class="grid grid-duas" id="camadas"></div>
+</section>
+
+<footer class="rodape">
+  <div class="palco palco-rodape" aria-label="Icosaedro tridimensional em rotação, ecoando o cabeçalho">
+    <canvas id="cena-rodape" width="900" height="900"></canvas>
+  </div>
+  <div class="eyebrow">Entrevistada Multifácies</div>
+</footer>
+
+<script>
+  // ======================================================================
+  // DADOS — 12 paradoxos (um por vértice do icosaedro)
+  // ======================================================================
+  const facetas = [
+    {
+      t: "Duas medicinas, uma raiz",
+      a: "Homeopatia", b: "Alopatia",
+      d: "Transita entre abordagens opostas conforme o que o corpo pede: em certas crises, os glóbulos; na enxaqueca, o comprimido.",
+      refK: "Hipócrates",
+      refTxt: "médico da Grécia antiga, tido como pai da medicina; dele vêm os princípios dos semelhantes e dos contrários que atravessam toda a história da medicina ocidental."
+    },
+    {
+      t: "O corpo como prática viva",
+      a: "Teoria", b: "Vivência",
+      d: "Um cuidado corporal incorporado ao cotidiano: saber em quais ossos se apoia, abrir o peito ao dirigir, habitar o corpo a cada gesto.",
+      refK: "Eutonia",
+      refTxt: "prática corporal criada por Gerda Alexander no século XX; o nome vem do grego eu (bom) + tónos (tônus) e busca o equilíbrio do tônus pela consciência do próprio corpo."
+    },
+    {
+      t: "Maternidade no plural",
+      a: "Acolher", b: "Respeitar o tempo",
+      d: "Trajetórias de cuidado singulares sob o mesmo teto, com escuta das identidades e respeito ao ritmo de cada um — sem pressa de rótulos.",
+      refK: "Diversidade de gênero",
+      refTxt: "o reconhecimento de que identidades plurais demandam acolhimento e redes de apoio, e não um molde único de 'normalidade'."
+    },
+    {
+      t: "Zela pelo público, evita o consultório",
+      a: "Valoriza o SUS", b: "Não gosta de médico",
+      d: "Defende o sistema público como patrimônio — a fila nacional de transplantes, o alcance único no mundo — mas guarda reservas com o atendimento frio.",
+      refK: "Saúde pública universal",
+      refTxt: "a ideia de um sistema que garante acesso a toda a população; experiências de cobertura universal são referência de política pública em escala nacional."
+    },
+    {
+      t: "Usa a técnica, não se diz técnica",
+      a: "Tecnologia", b: "Humanização",
+      d: "Encanta-se com os estudos de fáscias e do sistema nervoso, mas insiste: a técnica sozinha afasta o humano. Antes do joelho, há um ser inteiro.",
+      refK: "Fáscias",
+      refTxt: "rede de tecido conjuntivo que envolve e conecta músculos, ossos e órgãos; a pesquisa recente mostra seu papel na postura, no movimento e na percepção corporal."
+    },
+    {
+      t: "Cuida sem parar, não tolera a dor",
+      a: "Quase nunca adoece", b: "Uma dor de cabeça derruba",
+      d: "Uma vida inteira de cuidado preventivo convive com o limite estreito diante da enxaqueca — a única exceção ao pudor com remédios.",
+      refK: "Enxaqueca",
+      refTxt: "cefaleia primária, em geral intensa e pulsátil, com gatilhos conhecidos como privação de sono e estresse; afeta mais mulheres e tem forte componente neurológico."
+    },
+    {
+      t: "Transmite o que não recebeu",
+      a: "Pais apartados do corpo", b: "Filhos com consciência corporal",
+      d: "Cresceu num ambiente onde o físico era 'coisa fútil' diante do intelectual. Reinventou essa herança e a passou adiante.",
+      refK: "Educação somática",
+      refTxt: "campo que reúne métodos de aprendizado do corpo pela própria sensação e movimento, em vez de apenas pela instrução externa."
+    },
+    {
+      t: "Sabe da academia, escolhe a água",
+      a: "“Tem que fazer musculação”", b: "Mas faz remo",
+      d: "Reconhece o que 'deveria' fazer, não faz — e mesmo assim se exercita com regularidade. A regra que descobriu: só persiste no que dá prazer.",
+      refK: "Remo",
+      refTxt: "esporte de resistência e ritmo que recruta grande parte da musculatura do corpo e trabalha coordenação, respiração e cadência."
+    },
+    {
+      t: "Da Índia ao equilíbrio",
+      a: "Corpo", b: "Espírito",
+      d: "Anos dedicados a uma prática milenar que une respiração, postura e atenção — a semente de um olhar que integra as camadas do ser.",
+      refK: "Yoga",
+      refTxt: "tradição de origem indiana, com milhares de anos, que combina posturas, controle da respiração e meditação como caminho de integração entre corpo e mente."
+    },
+    {
+      t: "Diz não ao remédio, abre uma exceção",
+      a: "“Não gosto de remédio”", b: "Toma para a dor de cabeça",
+      d: "Um pudor firme com o excesso de fármacos, com uma única porta aberta: o comprimido da enxaqueca, quando o sono falta ou o estresse aperta.",
+      refK: "Medicalização",
+      refTxt: "processo pelo qual questões da vida cotidiana passam a ser tratadas como problemas médicos; debate central sobre o uso ampliado de medicamentos."
+    },
+    {
+      t: "A lei e o corpo",
+      a: "Razão e Direito", b: "Saber sensorial",
+      d: "A precisão da formação jurídica, feita de argumento e norma, convive com um conhecimento que não se demonstra: o que se aprende pelo toque e pela sensação.",
+      refK: "Direito e saúde",
+      refTxt: "a saúde reconhecida como direito fundamental aproxima o campo jurídico do cuidado; a norma protege, mas não substitui a experiência vivida do corpo."
+    },
+    {
+      t: "Madura e eterna aprendiz",
+      a: "Meia-idade", b: "Sempre estudando",
+      d: "A maturidade não encerra a curiosidade: a cada fase, um novo campo de estudo, uma nova prática, uma nova versão de si em formação.",
+      refK: "Aprendizagem ao longo da vida",
+      refTxt: "a ideia de que o aprender não termina na juventude; a plasticidade do cérebro e do corpo acompanha a pessoa por toda a vida adulta."
+    }
+  ];
+
+  const camadas = [
+    { t: "Física", d: "Ossos, fáscias, postura — o corpo como instrumento que viabiliza a vida." },
+    { t: "Emocional", d: "O estresse e o descanso que acendem ou apagam as crises." },
+    { t: "Mental", d: "O pensamento que se reorganiza quando o corpo se solta." },
+    { t: "Espiritual", d: "O sentido e o pertencimento a um todo maior que o indivíduo." }
+  ];
+
+  // ======================================================================
+  // CARDS
+  // ======================================================================
+  const cards = document.getElementById('cards');
+  const cardEls = [];
+  facetas.forEach((f, i) => {
+    const el = document.createElement('article');
+    el.className = 'card fade';
+    el.id = 'card-' + i;
+    el.innerHTML = `
+      <div class="num">Encontro ${String(i + 1).padStart(2, '0')}</div>
+      <h3>${f.t}</h3>
+      <div class="tension">
+        <span class="a">${f.a}</span>
+        <span class="vs">↔</span>
+        <span class="b">${f.b}</span>
+      </div>
+      <p class="desc">${f.d}</p>
+      <div class="ref"><span class="k">${f.refK}</span> — ${f.refTxt}</div>`;
+    cards.appendChild(el);
+    cardEls.push(el);
+  });
+
+  const camadasEl = document.getElementById('camadas');
+  camadas.forEach(c => {
+    const el = document.createElement('article');
+    el.className = 'card fade';
+    el.innerHTML = `<h3>${c.t}</h3><p class="desc">${c.d}</p>`;
+    camadasEl.appendChild(el);
+  });
+
+  // ======================================================================
+  // ICOSAEDRO 3D — 12 vértices, 30 arestas, 20 faces (canvas 2D + projeção)
+  // ======================================================================
+  const canvas = document.getElementById('cena');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const CX = W / 2, CY = H / 2;
+
+  // vértices do icosaedro a partir da razão áurea
+  const t = (1 + Math.sqrt(5)) / 2;
+  let V = [
+    [-1,  t,  0], [ 1,  t,  0], [-1, -t,  0], [ 1, -t,  0],
+    [ 0, -1,  t], [ 0,  1,  t], [ 0, -1, -t], [ 0,  1, -t],
+    [ t,  0, -1], [ t,  0,  1], [-t,  0, -1], [-t,  0,  1]
+  ];
+  // normaliza para raio 1
+  V = V.map(p => { const n = Math.hypot(...p); return p.map(c => c / n); });
+
+  // arestas (pares de vértices à distância mínima)
+  const EDGES = [];
+  for (let i = 0; i < V.length; i++)
+    for (let j = i + 1; j < V.length; j++) {
+      const d = Math.hypot(V[i][0]-V[j][0], V[i][1]-V[j][1], V[i][2]-V[j][2]);
+      if (d < 1.2) EDGES.push([i, j]);
+    }
+
+  // 20 faces triangulares
+  const FACES = [];
+  for (let i = 0; i < V.length; i++)
+    for (let j = i + 1; j < V.length; j++)
+      for (let k = j + 1; k < V.length; k++) {
+        const near = (a, b) => Math.hypot(V[a][0]-V[b][0], V[a][1]-V[b][1], V[a][2]-V[b][2]) < 1.2;
+        if (near(i, j) && near(j, k) && near(i, k)) FACES.push([i, j, k]);
+      }
+
+  const R = 300;         // raio do icosaedro em px
+  const R_NODE = 540;     // raio dos nós do grafo
+  const FOCAL = 900;      // distância focal da perspectiva
+
+  function rot(p, ax, ay) {
+    let [x, y, z] = p;
+    // rotação em Y
+    let x1 = x * Math.cos(ay) + z * Math.sin(ay);
+    let z1 = -x * Math.sin(ay) + z * Math.cos(ay);
+    // rotação em X
+    let y2 = y * Math.cos(ax) - z1 * Math.sin(ax);
+    let z2 = y * Math.sin(ax) + z1 * Math.cos(ax);
+    return [x1, y2, z2];
+  }
+
+  function project(p) {
+    const s = FOCAL / (FOCAL + p[2] * R);
+    return { x: CX + p[0] * R * s, y: CY + p[1] * R * s, s, z: p[2] };
+  }
+
+  // nós do grafo: posicionados ao longo da direção de cada vértice, mais afastados
+  function projectNode(p) {
+    const s = FOCAL / (FOCAL + p[2] * R_NODE);
+    return { x: CX + p[0] * R_NODE * s, y: CY + p[1] * R_NODE * s, s, z: p[2] };
+  }
+
+  let angX = -0.35, angY = 0.4;
+  let velX = 0, velY = 0.0022;   // rotação automática suave
+  let dragging = false, lastX = 0, lastY = 0, userActive = false;
+
+  canvas.addEventListener('pointerdown', e => {
+    dragging = true; userActive = true;
+    lastX = e.clientX; lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    angY += dx * 0.008;
+    angX += dy * 0.008;
+    velY = dx * 0.0006;
+    velX = dy * 0.0006;
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  const release = () => { dragging = false; };
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointerleave', release);
+
+  function lerpColor(c1, c2, f) {
+    return c1.map((v, i) => Math.round(v + (c2[i] - v) * f));
+  }
+  const VERM = [224, 36, 51], VERD = [63, 191, 132];
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    if (!dragging) {
+      angX += velX; angY += velY;
+      // retorna devagar à rotação idle
+      velX *= 0.96;
+      velY += (0.0022 - velY) * 0.02;
+    }
+
+    const rv = V.map(p => rot(p, angX, angY));
+    const pv = rv.map(project);
+    const pn = rv.map(projectNode);
+
+    // ---- aura central ----
+    const aura = ctx.createRadialGradient(CX, CY, 0, CX, CY, R * 1.1);
+    aura.addColorStop(0, 'rgba(224,36,51,0.35)');
+    aura.addColorStop(0.6, 'rgba(179,18,31,0.08)');
+    aura.addColorStop(1, 'rgba(179,18,31,0)');
+    ctx.fillStyle = aura;
+    ctx.fillRect(0, 0, W, H);
+
+    // ---- arestas do grafo (centro -> nó), atrás ----
+    EDGES.forEach(() => {});
+    pn.forEach((n, i) => {
+      if (rv[i][2] > 0.15) return; // desenha depois as da frente
+      drawSpoke(n, i, rv[i][2]);
+    });
+
+    // ---- faces do icosaedro ordenadas por profundidade (painter) ----
+    const faceList = FACES.map(f => {
+      const zc = (rv[f[0]][2] + rv[f[1]][2] + rv[f[2]][2]) / 3;
+      return { f, zc };
+    }).sort((a, b) => a.zc - b.zc);
+
+    faceList.forEach(({ f, zc }) => {
+      const p0 = pv[f[0]], p1 = pv[f[1]], p2 = pv[f[2]];
+      // normal para sombreamento
+      const ux = rv[f[1]][0]-rv[f[0]][0], uy = rv[f[1]][1]-rv[f[0]][1], uz = rv[f[1]][2]-rv[f[0]][2];
+      const vx = rv[f[2]][0]-rv[f[0]][0], vy = rv[f[2]][1]-rv[f[0]][1], vz = rv[f[2]][2]-rv[f[0]][2];
+      const nz = ux * vy - uy * vx;
+      const facing = nz > 0;
+
+      const depth = (zc + 1) / 2;              // 0 (fundo) .. 1 (frente)
+      const col = lerpColor(VERM, VERD, depth);
+      const alpha = facing ? 0.10 + depth * 0.30 : 0.04 + depth * 0.10;
+
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${alpha})`;
+      ctx.fill();
+    });
+
+    // ---- arestas do icosaedro ----
+    EDGES.forEach(([i, j]) => {
+      const depth = ((rv[i][2] + rv[j][2]) / 2 + 1) / 2;
+      const col = lerpColor(VERM, VERD, depth);
+      ctx.beginPath();
+      ctx.moveTo(pv[i].x, pv[i].y);
+      ctx.lineTo(pv[j].x, pv[j].y);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.3 + depth * 0.6})`;
+      ctx.lineWidth = 1.4 + depth * 2;
+      ctx.stroke();
+    });
+
+    // ---- ser central ----
+    drawSer(1 + Math.sin(performance.now() / 700) * 0.04);
+
+    // ---- arestas do grafo da frente + nós ----
+    pn.forEach((n, i) => {
+      if (rv[i][2] <= 0.15) return;
+      drawSpoke(n, i, rv[i][2]);
+    });
+
+    // nós + rótulos, ordem de profundidade
+    const order = rv.map((p, i) => ({ i, z: p[2] })).sort((a, b) => a.z - b.z);
+    order.forEach(({ i }) => drawNode(pn[i], i, rv[i][2]));
+
+    requestAnimationFrame(draw);
+  }
+
+  function drawSpoke(n, i, z) {
+    const depth = (z + 1) / 2;
+    const col = lerpColor(VERM, VERD, depth);
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.lineTo(n.x, n.y);
+    ctx.setLineDash([5, 9]);
+    ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.15 + depth * 0.4})`;
+    ctx.lineWidth = 1 + depth * 1.4;
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawNode(n, i, z) {
+    const depth = (z + 1) / 2;
+    const r = (6 + depth * 10) * n.s;
+    const col = i % 2 ? VERD : VERM;
+    // halo
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r * 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.08 + depth * 0.12})`;
+    ctx.fill();
+    // ponto
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.55 + depth * 0.45})`;
+    ctx.fill();
+    // rótulo
+    if (depth > 0.28) {
+      ctx.font = `${Math.round(22 + depth * 10)}px "Segoe UI", sans-serif`;
+      ctx.fillStyle = `rgba(216,185,188,${0.4 + depth * 0.6})`;
+      ctx.textBaseline = 'middle';
+      const right = n.x >= CX;
+      ctx.textAlign = right ? 'left' : 'right';
+      ctx.fillText(facetas[i].refK, n.x + (right ? r + 10 : -r - 10), n.y);
+    }
+  }
+
+  function drawSer(pulse) {
+    const headR = 30 * pulse;
+    const hy = CY - 42;
+    // cabeça
+    const g = ctx.createLinearGradient(CX, hy - headR, CX, CY + 120);
+    g.addColorStop(0, '#ff5968');
+    g.addColorStop(1, '#8e0f19');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(CX, hy, headR, 0, Math.PI * 2);
+    ctx.fill();
+    // corpo (silhueta abstrata, sem rosto)
+    ctx.beginPath();
+    ctx.moveTo(CX - 34, CY + 10);
+    ctx.quadraticCurveTo(CX, CY - 26, CX + 34, CY + 10);
+    ctx.lineTo(CX + 30, CY + 130);
+    ctx.quadraticCurveTo(CX, CY + 150, CX - 30, CY + 130);
+    ctx.closePath();
+    ctx.fill();
+    // halo verde
+    ctx.beginPath();
+    ctx.arc(CX, hy, headR + 10, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(63,191,132,0.5)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  draw();
+
+  // ======================================================================
+  // ICOSAEDRO DO RODAPÉ — eco do cabeçalho, só o sólido girando
+  // ======================================================================
+  (function rodapeIco() {
+    const c = document.getElementById('cena-rodape');
+    if (!c) return;
+    const x2 = c.getContext('2d');
+    const w = c.width, h = c.height, cx = w / 2, cy = h / 2;
+    const r = w * 0.34, focal = w * 0.95;
+    let ax = 0.3, ay = 0.1;
+
+    function proj(p) {
+      const s = focal / (focal + p[2] * r);
+      return { x: cx + p[0] * r * s, y: cy + p[1] * r * s };
+    }
+
+    function loop() {
+      x2.clearRect(0, 0, w, h);
+      ax += 0.0016; ay += 0.0028;
+      const rv = V.map(p => rot(p, ax, ay));
+      const pv = rv.map(proj);
+
+      // aura
+      const aura = x2.createRadialGradient(cx, cy, 0, cx, cy, r * 1.2);
+      aura.addColorStop(0, 'rgba(224,36,51,0.28)');
+      aura.addColorStop(0.6, 'rgba(179,18,31,0.06)');
+      aura.addColorStop(1, 'rgba(179,18,31,0)');
+      x2.fillStyle = aura;
+      x2.fillRect(0, 0, w, h);
+
+      // faces (painter)
+      FACES.map(f => ({ f, zc: (rv[f[0]][2] + rv[f[1]][2] + rv[f[2]][2]) / 3 }))
+        .sort((a, b) => a.zc - b.zc)
+        .forEach(({ f, zc }) => {
+          const depth = (zc + 1) / 2;
+          const col = lerpColor(VERM, VERD, depth);
+          x2.beginPath();
+          x2.moveTo(pv[f[0]].x, pv[f[0]].y);
+          x2.lineTo(pv[f[1]].x, pv[f[1]].y);
+          x2.lineTo(pv[f[2]].x, pv[f[2]].y);
+          x2.closePath();
+          x2.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.07 + depth * 0.26})`;
+          x2.fill();
+        });
+
+      // arestas
+      EDGES.forEach(([i, j]) => {
+        const depth = ((rv[i][2] + rv[j][2]) / 2 + 1) / 2;
+        const col = lerpColor(VERM, VERD, depth);
+        x2.beginPath();
+        x2.moveTo(pv[i].x, pv[i].y);
+        x2.lineTo(pv[j].x, pv[j].y);
+        x2.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${0.3 + depth * 0.6})`;
+        x2.lineWidth = 1 + depth * 1.6;
+        x2.stroke();
+      });
+
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  // ======================================================================
+  // fade-in no scroll
+  // ======================================================================
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
