@@ -432,8 +432,46 @@
   // ======================================================================
   const canvas = document.getElementById('cena');
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+  const W = canvas.width, H = canvas.height;   // espaço lógico (1280) usado pelo desenho
   const CX = W / 2, CY = H / 2;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Ajusta o backing store do canvas ao tamanho realmente exibido (× DPR),
+  // mantendo o sistema de coordenadas lógico via ctx.scale. Evita pintar
+  // milhões de pixels à toa quando o canvas aparece bem menor que 1280.
+  function ajustarResolucao(cv, c2d, logico) {
+    const rect = cv.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const alvo = Math.max(1, Math.round((rect.width || logico / 2) * dpr));
+    // nunca passa do tamanho lógico (não adianta render acima da arte)
+    const px = Math.min(alvo, logico);
+    if (cv.width !== px || cv.height !== px) {
+      cv.width = px; cv.height = px;
+    }
+    c2d.setTransform(px / logico, 0, 0, px / logico, 0, 0);
+  }
+
+  // Executa um loop de animação só quando o canvas está visível na tela,
+  // e o interrompe por completo quando sai. Respeita "reduzir movimento":
+  // nesse caso desenha um único quadro estático.
+  function animarVisivel(cv, render) {
+    let rodando = false, raf = 0;
+    const frame = () => { render(); raf = requestAnimationFrame(frame); };
+    const obs = new IntersectionObserver((ents) => {
+      const visivel = ents[0].isIntersecting;
+      if (visivel && !rodando) {
+        rodando = true;
+        if (prefersReduced) { render(); }        // um quadro, sem loop
+        else { raf = requestAnimationFrame(frame); }
+      } else if (!visivel && rodando) {
+        rodando = false;
+        cancelAnimationFrame(raf);
+      }
+    }, { threshold: 0.01 });
+    obs.observe(cv);
+    return () => { if (prefersReduced) render(); };
+  }
 
   // vértices do icosaedro a partir da razão áurea
   const t = (1 + Math.sqrt(5)) / 2;
@@ -516,9 +554,10 @@
   const VERM = [224, 36, 51], VERD = [63, 191, 132];
 
   function draw() {
+    ajustarResolucao(canvas, ctx, W);
     ctx.clearRect(0, 0, W, H);
 
-    if (!dragging) {
+    if (!dragging && !prefersReduced) {
       angX += velX; angY += velY;
       // retorna devagar à rotação idle
       velX *= 0.96;
@@ -595,8 +634,6 @@
     // nós + rótulos, ordem de profundidade
     const order = rv.map((p, i) => ({ i, z: p[2] })).sort((a, b) => a.z - b.z);
     order.forEach(({ i }) => drawNode(pn[i], i, rv[i][2]));
-
-    requestAnimationFrame(draw);
   }
 
   function drawSpoke(n, i, z) {
@@ -664,7 +701,7 @@
     ctx.stroke();
   }
 
-  draw();
+  animarVisivel(canvas, draw);
 
   // ======================================================================
   // ICOSAEDRO DO RODAPÉ — eco do cabeçalho, só o sólido girando
@@ -673,7 +710,7 @@
     const c = document.getElementById('cena-rodape');
     if (!c) return;
     const x2 = c.getContext('2d');
-    const w = c.width, h = c.height, cx = w / 2, cy = h / 2;
+    const w = 900, h = 900, cx = w / 2, cy = h / 2;   // espaço lógico fixo
     const r = w * 0.34, focal = w * 0.95;
     let ax = 0.3, ay = 0.1;
 
@@ -683,8 +720,9 @@
     }
 
     function loop() {
+      ajustarResolucao(c, x2, w);
       x2.clearRect(0, 0, w, h);
-      ax += 0.0016; ay += 0.0028;
+      if (!prefersReduced) { ax += 0.0016; ay += 0.0028; }
       const rv = V.map(p => rot(p, ax, ay));
       const pv = rv.map(proj);
 
@@ -723,9 +761,8 @@
         x2.stroke();
       });
 
-      requestAnimationFrame(loop);
     }
-    loop();
+    animarVisivel(c, loop);
   })();
 
   // ======================================================================
