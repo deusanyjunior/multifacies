@@ -7,15 +7,15 @@
 <style>
   :root {
     --vermelho: #b3121f;
-    --vermelho-vivo: #e02433;
-    --vermelho-escuro: #6e0b14;
+    --vermelho-vivo: #d41e2c;
+    --vermelho-escuro: #8e0f19;
     --verde: #1f7a4d;
-    --verde-claro: #3fbf84;
-    --fundo: #140406;
-    --fundo-2: #1f070a;
-    --tinta: #f6e9ea;
-    --tinta-suave: #d8b9bc;
-    --linha: rgba(224, 36, 51, 0.35);
+    --verde-claro: #16915a;      /* verde mais escuro p/ contraste no branco */
+    --fundo: #ffffff;
+    --fundo-2: #fbf2f3;          /* leve toque rosado no topo */
+    --tinta: #2a1013;            /* texto escuro */
+    --tinta-suave: #6b4a4e;      /* texto secundário */
+    --linha: rgba(179, 18, 31, 0.28);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -70,7 +70,7 @@
     font-weight: 800;
     line-height: 1.02;
     letter-spacing: -0.02em;
-    background: linear-gradient(120deg, #fff 10%, var(--vermelho-vivo) 55%, var(--verde-claro) 115%);
+    background: linear-gradient(120deg, var(--vermelho) 0%, var(--vermelho-vivo) 50%, var(--verde) 115%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -122,11 +122,12 @@
 
   .card {
     position: relative;
-    background: linear-gradient(160deg, rgba(179,18,31,0.16), rgba(20,4,6,0.6));
-    border: 1px solid rgba(224,36,51,0.22);
+    background: linear-gradient(160deg, #ffffff, #fdf3f4);
+    border: 1px solid rgba(179,18,31,0.18);
     border-radius: 18px;
     padding: 26px 24px;
     overflow: hidden;
+    box-shadow: 0 10px 28px -20px rgba(142,15,25,0.45);
     transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
   .card::before {
@@ -139,7 +140,7 @@
   .card:hover {
     transform: translateY(-5px);
     border-color: var(--verde);
-    box-shadow: 0 18px 40px -22px rgba(224,36,51,0.6);
+    box-shadow: 0 18px 40px -24px rgba(142,15,25,0.55);
   }
   .card.destaque {
     border-color: var(--verde-claro);
@@ -167,8 +168,8 @@
     border-radius: 999px;
     font-weight: 600;
   }
-  .tension .a { background: rgba(224,36,51,0.18); color: #ffb3ba; border: 1px solid rgba(224,36,51,0.4); }
-  .tension .b { background: rgba(63,191,132,0.14); color: var(--verde-claro); border: 1px solid rgba(63,191,132,0.4); }
+  .tension .a { background: rgba(212,30,44,0.10); color: var(--vermelho); border: 1px solid rgba(212,30,44,0.35); }
+  .tension .b { background: rgba(22,145,90,0.10); color: var(--verde); border: 1px solid rgba(22,145,90,0.35); }
   .tension .vs { opacity: 0.5; font-size: 0.8rem; }
 
   .card p.desc { color: var(--tinta-suave); font-size: 0.95rem; }
@@ -194,13 +195,13 @@
     font-size: 0.84rem;
     color: var(--tinta-suave);
   }
-  .ref .k { color: #ff8a93; font-weight: 600; }
+  .ref .k { color: var(--vermelho); font-weight: 700; }
 
   /* ---------- FAIXA DE CONCEITO ---------- */
   .conceito {
-    background: linear-gradient(90deg, rgba(179,18,31,0.22), rgba(31,122,77,0.12));
-    border-top: 1px solid rgba(224,36,51,0.25);
-    border-bottom: 1px solid rgba(224,36,51,0.25);
+    background: linear-gradient(90deg, rgba(179,18,31,0.07), rgba(31,122,77,0.05));
+    border-top: 1px solid rgba(179,18,31,0.20);
+    border-bottom: 1px solid rgba(179,18,31,0.20);
     text-align: center;
   }
   .conceito blockquote {
@@ -599,7 +600,7 @@
 
       const depth = (zc + 1) / 2;              // 0 (fundo) .. 1 (frente)
       const col = lerpColor(VERM, VERD, depth);
-      const alpha = facing ? 0.10 + depth * 0.30 : 0.04 + depth * 0.10;
+      const alpha = facing ? 0.14 + depth * 0.34 : 0.06 + depth * 0.14;
 
       ctx.beginPath();
       ctx.moveTo(p0.x, p0.y);
@@ -666,7 +667,7 @@
     // rótulo
     if (depth > 0.28) {
       ctx.font = `${Math.round(22 + depth * 10)}px "Segoe UI", sans-serif`;
-      ctx.fillStyle = `rgba(216,185,188,${0.4 + depth * 0.6})`;
+      ctx.fillStyle = `rgba(42,16,19,${0.45 + depth * 0.5})`;
       ctx.textBaseline = 'middle';
       const right = n.x >= CX;
       ctx.textAlign = right ? 'left' : 'right';
